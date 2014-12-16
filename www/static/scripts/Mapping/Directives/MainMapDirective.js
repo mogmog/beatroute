@@ -52,23 +52,18 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
             function Route(layer) {
 
-                this.addLine = function (x, y) {
+                this.addLine = function (pos) {
+                    var points = pos.map(function(pos) {return [pos.x + 4000, pos.y + 4000]});
 
-                    var points = [
-                        [4480, 4200],
-                        [4580, 4400],
-                        [4680, 4100],
-                        [4780, 4300],
-                        [4180, 4300],
-                        [4280, 4100],
-                        [4380, 4400]
-                    ];
-
+                    console.log(points);
+                    
                     var line = d3.svg.line()
                         .tension(0)
                         .interpolate("cardinal-closed");
 
                     var svg = layer.datum(points)
+
+                    svg.selectAll('path').remove();
 
                     svg.append("path")
                         .style("stroke", "#ddd")
@@ -83,7 +78,7 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                         path.transition()
                             .duration(7500)
                             .attrTween("stroke-dasharray", tweenDash)
-                            .each("end", function() { d3.select(this).call(transition); });
+                          //  .each("end", function() { d3.select(this).call(transition); });
                     }
 
                     function tweenDash() {
@@ -103,8 +98,12 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
             }
 
             $scope.overlay.draw = function() {
-                var pos = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(34.397, 150.644));
-                $scope.route.addLine(pos.x+4000, pos.y+4000);
+                var pos1 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(34.397, 150.644));
+                var pos2 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(34.797, 150.944));
+                var pos3 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.797, 151.944));
+
+
+                $scope.route.addLine([pos1, pos2, pos3]);
 
 
             };
