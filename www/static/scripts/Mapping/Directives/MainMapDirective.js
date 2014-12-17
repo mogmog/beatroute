@@ -52,33 +52,32 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
             function Route(layer) {
 
-                this.addLine = function (pos) {
-                    var points = pos.map(function(pos) {return [pos.x + 4000, pos.y + 4000]});
+                this.addLine = function () {
 
-                    console.log(points);
-                    
                     var line = d3.svg.line()
-                        .tension(0)
-                        .interpolate("cardinal-closed");
+                        .x(function(d) { return (d.x + 4000); })
+                        .y(function(d) { return (d.y + 4000); })
+                        .interpolate("cardinal-closed")
+                    .tension(0)
 
-                    var svg = layer.datum(points)
-
-                    svg.selectAll('path').remove();
-
-                    svg.append("path")
+                    var cpg = layer.selectAll("path")
+                        .data($scope.data, function(d) {if (d) return d.x + '-' + d.y;})
                         .style("stroke", "#ddd")
                         .style("stroke-dasharray", "4,4")
-                        .attr("d", line);
-
-                    svg.append("path")
-                        .attr("d", line)
                         .call(transition);
+
+                    cpg.enter()
+                        .append("path")
+                        .attr("d",line($scope.data))
+                        .call(transition);
+
+                    cpg.exit().remove();
 
                     function transition(path) {
                         path.transition()
                             .duration(7500)
                             .attrTween("stroke-dasharray", tweenDash)
-                          //  .each("end", function() { d3.select(this).call(transition); });
+                            .each("end", function() { d3.select(this).call(transition); });
                     }
 
                     function tweenDash() {
@@ -92,18 +91,26 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
             $scope.overlay.onAdd = function() {
                 $scope.projection = this.getProjection();
-                var layer  = d3.select(this.getPanes().overlayMouseTarget).append("div").attr("class", "SvgOverlay").append("svg");
+                $scope.layer  = d3.select(this.getPanes().overlayMouseTarget).append("div").attr("class", "SvgOverlay").append("svg");
 
-                 $scope.route = new Route(layer);
+                $scope.route = new Route($scope.layer);
+
             }
 
             $scope.overlay.draw = function() {
                 var pos1 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(34.397, 150.644));
                 var pos2 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(34.797, 150.944));
                 var pos3 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.797, 151.944));
+                var pos4 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.397, 151.944));
+                var pos5 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.897, 151.834));
+                var pos6 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.647, 151.973));
+                var pos7 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.837, 151.921));
 
 
-                $scope.route.addLine([pos1, pos2, pos3]);
+                $scope.data = [pos1, pos2, pos3, pos4, pos5, pos6, pos7];
+
+
+                $scope.route.addLine();
 
 
             };
