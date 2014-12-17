@@ -54,24 +54,33 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
                 this.addLine = function () {
 
-                    var line = d3.svg.line()
-                        .x(function(d) { return (d.x + 4000); })
-                        .y(function(d) { return (d.y + 4000); })
-                        .interpolate("cardinal-closed")
-                    .tension(0)
+                    var points = [
+                        [4480, 200],
+                        [4580, 400],
+                        [4680, 100],
+                        [4780, 4300],
+                        [4180, 4300],
+                        [4280, 4100],
+                        [4380, 4400]
+                    ];
 
-                    var cpg = layer.selectAll("path")
-                        .data($scope.data, function(d) {if (d) return d.x + '-' + d.y;})
+                    var line = d3.svg.line()
+                        .tension(0) // Catmull–Rom
+                        .interpolate("cardinal-closed");
+
+                    var svg = layer
+                        .datum(points)
+                        .attr("width", 960)
+                        .attr("height", 500);
+
+                    svg.append("path")
                         .style("stroke", "#ddd")
                         .style("stroke-dasharray", "4,4")
-                        .call(transition);
+                        .attr("d", line);
 
-                    cpg.enter()
-                        .append("path")
-                        .attr("d",line($scope.data))
+                    svg.append("path")
+                        .attr("d", line)
                         .call(transition);
-
-                    cpg.exit().remove();
 
                     function transition(path) {
                         path.transition()
@@ -85,6 +94,7 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                             i = d3.interpolateString("0," + l, l + "," + l);
                         return function(t) { return i(t); };
                     }
+
 
                 }
             }
