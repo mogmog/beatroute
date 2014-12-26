@@ -52,21 +52,26 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
             function Route(layer) {
 
+                var line = d3.svg.line()
+                    .tension(0) // Catmull–Rom
+                    .interpolate("cardinal-closed");
+
+
+
                 this.addLine = function () {
 
+                    $scope.drawing = true;
+
                     var points = [
-                        [4480, 200],
-                        [4580, 400],
-                        [4680, 100],
-                        [4780, 4300],
-                        [4180, 4300],
-                        [4280, 4100],
-                        [4380, 4400]
+                        [$scope.data[0].x + 4000, $scope.data[0].y + 4000],
+                        [$scope.data[1].x + 4000, $scope.data[1].y + 4000],
+                        [$scope.data[2].x + 4000, $scope.data[2].y + 4000],
+                        [$scope.data[3].x + 4000, $scope.data[3].y + 4000],
+                        [$scope.data[4].x + 4000, $scope.data[4].y + 4000],
+                        [$scope.data[5].x + 4000, $scope.data[5].y + 4000]
                     ];
 
-                    var line = d3.svg.line()
-                        .tension(0) // Catmull–Rom
-                        .interpolate("cardinal-closed");
+
 
                     var svg = layer
                         .datum(points)
@@ -84,15 +89,23 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
                     function transition(path) {
                         path.transition()
-                            .duration(7500)
+                            .duration(27500)
                             .attrTween("stroke-dasharray", tweenDash)
-                            .each("end", function() { d3.select(this).call(transition); });
+                            .each("end", function() {
+                            $scope.drawing = false;
+                            });
                     }
 
                     function tweenDash() {
                         var l = this.getTotalLength(),
                             i = d3.interpolateString("0," + l, l + "," + l);
-                        return function(t) { return i(t); };
+                       // console.log("0," + l, l + "," + l);
+
+                        return function(t) {
+
+                           // console.log(t);
+
+                            return i(t); };
                     }
 
 
@@ -104,25 +117,27 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                 $scope.layer  = d3.select(this.getPanes().overlayMouseTarget).append("div").attr("class", "SvgOverlay").append("svg");
 
                 $scope.route = new Route($scope.layer);
-
+                $scope.drawing = false;
             }
 
             $scope.overlay.draw = function() {
-                var pos1 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(34.397, 150.644));
-                var pos2 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(34.797, 150.944));
-                var pos3 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.797, 151.944));
-                var pos4 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.397, 151.944));
-                var pos5 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.897, 151.834));
-                var pos6 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.647, 151.973));
-                var pos7 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(33.837, 151.921));
+
+               // $scope.projection = this.getProjection();
+
+               // $scope.layer.select('path').remove();
+
+                var pos1 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(12.397, 150.844));
+                var pos2 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(45.797, 161.444));
+                var pos3 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(55.797, 152.244));
+                var pos4 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(11.397, 155.844));
+                var pos5 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(41.797, 165.444));
+                var pos6 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(57.797, 155.244));
 
 
-                $scope.data = [pos1, pos2, pos3, pos4, pos5, pos6, pos7];
+                $scope.data = [pos1, pos2, pos3, pos4, pos5, pos6];
 
-
-                $scope.route.addLine();
-
-
+                if (!$scope.drawing)
+                    $scope.route.addLine();
             };
 
             $scope.overlay.setMap($scope.dcumapping);
