@@ -50,94 +50,68 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
             $scope.overlay      = new google.maps.OverlayView();
 
+            $scope.data = [
+                {x : 0, y: 0, top_left : {longitude : 0, latitude : 11}},
+                {x : 0, y: 0, top_left : {longitude : 20, latitude : 21}},
+                {x : 0, y: 0, top_left : {longitude : 56, latitude : -21}}
+            ];
+
+
             function Route(layer) {
 
-                var line = d3.svg.line()
-                    .tension(0) // Catmull–Rom
-                    .interpolate("cardinal-closed");
+                $scope.line = d3.svg.line()
+                    .tension(0)
+                    .interpolate("basis")
+                    .x(function(d) {return d.x + 4000})
+                    .y(function(d) {return d.y + 4000});
 
-
-
-                this.addLine = function () {
-
-                    $scope.drawing = true;
-
-                    var points = [
-                        [$scope.data[0].x + 4000, $scope.data[0].y + 4000],
-                        [$scope.data[1].x + 4000, $scope.data[1].y + 4000],
-                        [$scope.data[2].x + 4000, $scope.data[2].y + 4000],
-                        [$scope.data[3].x + 4000, $scope.data[3].y + 4000],
-                        [$scope.data[4].x + 4000, $scope.data[4].y + 4000],
-                        [$scope.data[5].x + 4000, $scope.data[5].y + 4000]
-                    ];
-
-
+                this.addShapes = function() {
 
                     var svg = layer
-                        .datum(points)
-                        .attr("width", 960)
-                        .attr("height", 500);
-
-                    svg.append("path")
-                        .style("stroke", "#ddd")
-                        .style("stroke-dasharray", "4,4")
-                        .attr("d", line);
-
-                    svg.append("path")
-                        .attr("d", line)
+                        .append("path")
+                        .style("stroke", "#000")
                         .call(transition);
-
-                    function transition(path) {
-                        path.transition()
-                            .duration(27500)
-                            .attrTween("stroke-dasharray", tweenDash)
-                            .each("end", function() {
-                            $scope.drawing = false;
-                            });
-                    }
-
-                    function tweenDash() {
-                        var l = this.getTotalLength(),
-                            i = d3.interpolateString("0," + l, l + "," + l);
-                       // console.log("0," + l, l + "," + l);
-
-                        return function(t) {
-
-                           // console.log(t);
-
-                            return i(t); };
-                    }
-
-
                 }
             }
 
             $scope.overlay.onAdd = function() {
-                $scope.projection = this.getProjection();
+
                 $scope.layer  = d3.select(this.getPanes().overlayMouseTarget).append("div").attr("class", "SvgOverlay").append("svg");
 
-                $scope.route = new Route($scope.layer);
-                $scope.drawing = false;
+                var route = new Route($scope.layer);
+                route.addShapes();
+            }
+
+            function transition(path) {
+            $scope.path = path;
+                path.transition().duration(27000).attrTween("stroke-dasharray", tweenDash)
+            }
+
+            //thanks to http://zevross.com/blog/2014/09/30/use-the-amazing-d3-library-to-animate-a-path-on-a-leaflet-map/
+            function tweenDash() {
+                return function(t) {
+                    var l = $scope.path.node().getTotalLength();
+                    var interpolate = d3.interpolateString("0," + l, l + "," + l);
+                    return interpolate(t);
+                }
             }
 
             $scope.overlay.draw = function() {
+                $scope.projection = this.getProjection();
 
-               // $scope.projection = this.getProjection();
+                /*update the x y for the new map layout, post zooming*/
+                $scope.data.forEach(function(search){
+                    search.x = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(search.top_left.latitude, search.top_left.longitude)).x;
+                    search.y = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(search.top_left.latitude, search.top_left.longitude)).y;
+                });
 
-               // $scope.layer.select('path').remove();
+                d3.selectAll("path").datum($scope.data).attr("d", $scope.line)
 
-                var pos1 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(12.397, 150.844));
-                var pos2 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(45.797, 161.444));
-                var pos3 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(55.797, 152.244));
-                var pos4 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(11.397, 155.844));
-                var pos5 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(41.797, 165.444));
-                var pos6 = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(57.797, 155.244));
+                d3.selectAll("path").each(function(d){$scope.total = (this.getTotalLength())});
+
+                    console.log($scope.total);
 
 
-                $scope.data = [pos1, pos2, pos3, pos4, pos5, pos6];
-
-                if (!$scope.drawing)
-                    $scope.route.addLine();
             };
 
             $scope.overlay.setMap($scope.dcumapping);
