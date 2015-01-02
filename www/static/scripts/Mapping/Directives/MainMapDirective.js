@@ -84,7 +84,9 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
             function transition(path) {
             $scope.path = path;
-                path.transition().duration(27000).attrTween("stroke-dasharray", tweenDash)
+                path.transition().duration(27000).attrTween("stroke-dasharray", tweenDash).each("end", function() {
+                 path.attr('stroke-dasharray', null);
+                });
             }
 
             //thanks to http://zevross.com/blog/2014/09/30/use-the-amazing-d3-library-to-animate-a-path-on-a-leaflet-map/
@@ -107,9 +109,7 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
                 d3.selectAll("path").datum($scope.data).attr("d", $scope.line)
 
-                d3.selectAll("path").each(function(d){$scope.total = (this.getTotalLength())});
 
-                    console.log($scope.total);
 
 
             };
