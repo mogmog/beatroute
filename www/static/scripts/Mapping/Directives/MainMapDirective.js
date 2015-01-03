@@ -18,7 +18,7 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                 scaleControl            : false,
                 streetViewControl       : false,
                 overviewMapControl      : false,
-                center                  : new google.maps.LatLng(34.397, 150.644),
+                center                  : new google.maps.LatLng(0, 11),
                 zoom                    : 5,
                 styles:[
                     {
@@ -54,15 +54,15 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                 {x : 0, y: 0, geo : {longitude : 0,  latitude : 11},    name : "Place 1"},
                 {x : 0, y: 0, geo : {longitude : 20, latitude : 21},    name : "Place 2"},
                 {x : 0, y: 0, geo : {longitude : 56, latitude : -21},   name : "Place 3"},
-                {x : 0, y: 0, geo : {longitude : 56, latitude : -34},   name : "Place 4"},
-                {x : 0, y: 0, geo : {longitude : 56, latitude : -31},   name : "Place 5"}
+                {x : 0, y: 0, geo : {longitude : 56, latitude : -31},   name : "Place 5"},
+                {x : 0, y: 0, geo : {longitude : 46, latitude : -34},   name : "Place 4"}
+
             ];
 
             function Route(layer) {
 
                 $scope.line = d3.svg.line()
-                    .tension(0)
-                    // .interpolate("basis")
+                     .interpolate("cardinal")
                     .x(function(d) {return d.x + 4000})
                     .y(function(d) {return d.y + 4000});
 
@@ -71,13 +71,13 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                     layer.append("circle").style("stroke", "#000")
 
                     layer
-                        .selectAll('.rectangle')
+                        .selectAll('.marker')
                         .data($scope.data)
                         .enter()
                         .append('circle')
                         .attr("stroke", "black")
-                        .attr("stroke-width","10px")
-                        .attr("class", "rectangle")
+                        .attr("stroke-width","3px")
+                        .attr("class", "marker")
 
                 }
             }
@@ -119,10 +119,10 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                       .selectAll("path").datum($scope.data).attr("d", $scope.line)
 
                 $scope.layer
-                    .selectAll('circle.rectangle')
+                    .selectAll('circle.marker')
                     .attr("cx",      function(d, i) { return d.x + 4000; } )
                     .attr("cy",      function(d, i) { return d.y + 4000; } )
-                    .attr("r",       function(d) {return 5} )
+                    .attr("r",       function(d) {return 10} )
             };
 
             $scope.overlay.setMap($scope.dcumapping);
