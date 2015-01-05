@@ -110,9 +110,9 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                 $scope.projection = this.getProjection();
 
                 /*update the x y for the new map layout, post zooming*/
-                $scope.data.forEach(function(search){
-                    search.x = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(search.geo.latitude, search.geo.longitude)).x;
-                    search.y = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(search.geo.latitude, search.geo.longitude)).y;
+                $scope.data.forEach(function(item){
+                    item.x = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(item.geo.latitude, item.geo.longitude)).x;
+                    item.y = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(item.geo.latitude, item.geo.longitude)).y;
                 });
 
                 $scope.layer
