@@ -92,7 +92,7 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
 
             function transition(path) {
                 $scope.path = path;
-                path.transition().duration(30000).attrTween("stroke-dasharray", tweenDash).each("end", function() {
+                path.transition().duration(10000).attrTween("stroke-dasharray", tweenDash).each("end", function() {
                     path.attr('stroke-dasharray', null); //leaving the line as dash-array was causing glitches
                 });
             }
