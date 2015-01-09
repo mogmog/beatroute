@@ -10,8 +10,6 @@ Application.Directives.directive('routearrow', function ($state, $stateParams, $
 
         link : function($scope) {
 
-            console.log($scope);
-
             $scope.data = [
                 {x : 0, y: 0, geo : {longitude : 0,  latitude : 11},    name : "Place 1"},
                 {x : 0, y: 0, geo : {longitude : 20, latitude : 21},    name : "Place 2"},
