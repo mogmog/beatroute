@@ -1,4 +1,4 @@
-Application.Directives.directive('photo', function ($state, $stateParams, $filter, $location, $q) {
+Application.Directives.directive('photo', function ($state, $stateParams, $filter, $location, $q, $resource) {
 
     var styles = [{
         stylers:[{ color: "#ffffff"}, {saturation: -75}, {lightness: -50}]
@@ -49,6 +49,19 @@ Application.Directives.directive('photo', function ($state, $stateParams, $filte
                 }
 
                 $scope.overlay2.draw = function () {
+
+                    var minx = $scope.dcumapping.getBounds().getSouthWest().lng();
+                    var maxx = $scope.dcumapping.getBounds().getNorthEast().lng();
+
+                    var miny = $scope.dcumapping.getBounds().getSouthWest().lat();
+                    var maxy = $scope.dcumapping.getBounds().getNorthEast().lat();
+
+
+                    var Panario = $resource("http://www.panoramio.com/map/get_panoramas.php?set=public&from=0&to=20&minx=" + minx + "&miny=" + miny + "&maxx=" + maxx+ "&maxy=" + maxy + "&size=thumbnail&mapfilter=true", { callback: "JSON_CALLBACK" },{ get: { method: "JSONP" }});
+
+                    $scope.$parent.picturesOnMap = Panario.get();
+
+                    console.log($scope.picturesOnMap);
 
                     var projection = this.getProjection();
 
