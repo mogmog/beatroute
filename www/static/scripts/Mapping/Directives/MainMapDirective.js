@@ -47,7 +47,24 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
         },
 
         link : function($scope) {
-            $scope.overlay  = new google.maps.OverlayView();
+
+            var overlay = function(map) {
+                this.setMap(map);
+                this.draw = function() {
+                    console.log("super draw")
+                }
+
+            }
+
+            overlay.prototype = new google.maps.OverlayView();
+
+            google.maps.event.addListenerOnce($scope.dcumapping, 'idle', function() {
+                $scope.overlay = new overlay($scope.dcumapping);
+                $scope.overlay2 = new overlay($scope.dcumapping);
+
+                $scope.$broadcast('draw');
+            });
+
         }
     }
 

@@ -10,18 +10,18 @@ Application.Directives.directive('thinarrow', function ($state, $stateParams, $f
 
         link : function($scope) {
 
-            console.log($scope);
+            var layer;
 
-            $scope.data = [
+            var data  = [
                 {x : 0, y: 0, geo : {longitude : 0,  latitude : 11},    name : "Place 1"},
-                {x : 0, y: 0, geo : {longitude : 20, latitude : 21},    name : "Place 2"},
-                {x : 0, y: 0, geo : {longitude : 56, latitude : -21},   name : "Place 3"},
-                {x : 0, y: 0, geo : {longitude : 56, latitude : -31},   name : "Place 5"},
-                {x : 0, y: 0, geo : {longitude : 46, latitude : -34},   name : "Place 4"}
+                {x : 0, y: 0, geo : {longitude : 22, latitude : 21},    name : "Place 2"},
+                {x : 0, y: 0, geo : {longitude : 25, latitude : -21},   name : "Place 3"},
+                {x : 0, y: 0, geo : {longitude : 25, latitude : -31},   name : "Place 5"},
+                {x : 0, y: 0, geo : {longitude : 24, latitude : -34},   name : "Place 4"}
 
             ];
 
-            function Route(layer) {
+            function Route() {
 
                 function transition(path) {
                     $scope.path = path;
@@ -50,7 +50,7 @@ Application.Directives.directive('thinarrow', function ($state, $stateParams, $f
 
                     layer
                         .selectAll('.marker')
-                        .data($scope.data)
+                        .data(data)
                         .enter()
                         .append('circle')
                         .attr("stroke", "black")
@@ -61,31 +61,31 @@ Application.Directives.directive('thinarrow', function ($state, $stateParams, $f
                 }
             }
 
-            /*is this safe?*/
-            $scope.$watch('overlay', function() {
+            $scope.$on('draw', function() {
 
                 $scope.overlay.onAdd = function () {
+                    console.log(this);
+                    layer = d3.select(this.getPanes().overlayMouseTarget).append("div").attr("class", "SvgOverlay").append("svg");
 
-                    $scope.layer = d3.select(this.getPanes().overlayMouseTarget).append("div").attr("class", "SvgOverlay").append("svg");
-
-                    var route = new Route($scope.layer);
+                    var route = new Route();
                     route.addShapes();
                 }
 
-
                 $scope.overlay.draw = function () {
-                    $scope.projection = this.getProjection();
 
-                    /*update the x y for the new map layout, post zooming*/
-                    $scope.data.forEach(function (search) {
-                        search.x = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(search.geo.latitude, search.geo.longitude)).x;
-                        search.y = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(search.geo.latitude, search.geo.longitude)).y;
+                    var projection = this.getProjection();
+
+                    // update the x y for the new map layout, post zooming
+                    data.forEach(function (search) {
+                        search.x = projection.fromLatLngToDivPixel(new google.maps.LatLng(search.geo.latitude, search.geo.longitude)).x;
+                        search.y = projection.fromLatLngToDivPixel(new google.maps.LatLng(search.geo.latitude, search.geo.longitude)).y;
                     });
 
-                    $scope.layer
-                        .selectAll("path.g-trail").datum($scope.data).attr("d", $scope.line)
+                    layer
+                        .selectAll("path.g-trail").datum(data).attr("d", $scope.line)
 
-                    $scope.layer
+
+                    layer
                         .selectAll('circle.marker')
                         .attr("cx", function (d, i) {
                             return d.x + 4000;
@@ -94,11 +94,9 @@ Application.Directives.directive('thinarrow', function ($state, $stateParams, $f
                             return d.y + 4000;
                         })
                         .attr("r", function (d) {
-                            return 4
+                            return 2
                         })
                 };
-
-                $scope.overlay.setMap($scope.dcumapping);
 
             });
 

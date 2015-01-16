@@ -58,44 +58,11 @@ Application.Directives.directive('routearrow', function ($state, $stateParams, $
                 }
             }
 
-            /*is this safe?*/
-            $scope.$watch('overlay', function() {
+            $scope.$on('draw', function() {
 
-                $scope.overlay.onAdd = function () {
-
-                    $scope.layer = d3.select(this.getPanes().overlayMouseTarget).append("div").attr("class", "SvgOverlay").append("svg");
-
-                    var route = new Route($scope.layer);
-                    route.addShapes();
-                }
+                alert("overlay1");
 
 
-                $scope.overlay.draw = function () {
-                    $scope.projection = this.getProjection();
-
-                    /*update the x y for the new map layout, post zooming*/
-                    $scope.data.forEach(function (search) {
-                        search.x = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(search.geo.latitude, search.geo.longitude)).x;
-                        search.y = $scope.projection.fromLatLngToDivPixel(new google.maps.LatLng(search.geo.latitude, search.geo.longitude)).y;
-                    });
-
-                    $scope.layer
-                        .selectAll("path").datum($scope.data).attr("d", $scope.line)
-
-                    $scope.layer
-                        .selectAll('circle.marker')
-                        .attr("cx", function (d, i) {
-                            return d.x + 4000;
-                        })
-                        .attr("cy", function (d, i) {
-                            return d.y + 4000;
-                        })
-                        .attr("r", function (d) {
-                            return 10
-                        })
-                };
-
-                $scope.overlay.setMap($scope.dcumapping);
 
             });
 
