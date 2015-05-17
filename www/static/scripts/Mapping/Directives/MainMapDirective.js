@@ -61,6 +61,7 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
             google.maps.event.addListenerOnce($scope.dcumapping, 'idle', function() {
                 $scope.overlay = new overlay($scope.dcumapping);
                 $scope.overlay2 = new overlay($scope.dcumapping);
+                $scope.overlay3 = new overlay($scope.dcumapping);
 
                 $scope.$broadcast('draw');
             });
