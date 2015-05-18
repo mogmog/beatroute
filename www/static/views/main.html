@@ -60,7 +60,8 @@
         <div class="BigMapholder">
             <div>
                 <div style="width:100px" ng-controller="PictureOnMapController">
-                    <img  ng-repeat="picture in picturesOnMap.photos" src="{{picture.photo_file_url}}">
+                    {{picture}}
+                    <img  ng-if="picture.width >= picture.height" ng-repeat="picture in picturesOnMap.photos" src="{{picture.photo_file_url}}">
                 </div>
 
             </div>
