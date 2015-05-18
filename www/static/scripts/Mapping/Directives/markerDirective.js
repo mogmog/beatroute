@@ -1,4 +1,4 @@
-Application.Directives.directive('draw', function ($state, $stateParams, $filter, $location, $q, $resource) {
+Application.Directives.directive('marker', function ($state, $stateParams, $filter, $location, $q, $resource) {
 
     var styles = [{
         stylers:[{ color: "#ffffff"}, {saturation: -75}, {lightness: -50}]

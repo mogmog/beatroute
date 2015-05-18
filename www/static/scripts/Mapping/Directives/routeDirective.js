@@ -1,4 +1,4 @@
-Application.Directives.directive('thinarrow', function ($state, $stateParams, $filter, $location, $q) {
+Application.Directives.directive('route', function ($state, $stateParams, $filter, $location, $q) {
 
     var styles = [{
         stylers:[{ color: "#ffffff"}, {saturation: -75}, {lightness: -50}]
