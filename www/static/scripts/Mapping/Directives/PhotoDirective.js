@@ -61,6 +61,9 @@ Application.Directives.directive('photo', function ($state, $stateParams, $filte
 
                     $scope.$parent.picturesOnMap = Panario.get();
 
+                    console.log($scope.$parent.picturesOnMap);
+
+
                     var projection = this.getProjection();
 
                    // update the x y for the new map layout, post zooming
