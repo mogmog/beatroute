@@ -5,10 +5,12 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
     }
     ];
 
+
+
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: '/static/views/Directives/mainmapdirective.html',
+        templateUrl: 'views/Directives/mainmapdirective.html',
         controller: function($scope) {
 
             $scope.mapOptions = {
@@ -18,8 +20,8 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                 scaleControl            : false,
                 streetViewControl       : false,
                 overviewMapControl      : false,
-                center                  : new google.maps.LatLng(0, 11),
-                zoom                    : 5,
+                center                  : new google.maps.LatLng(43.50653, 16.44415),
+                zoom                    : 12,
                 styles:[
                     {
                         "stylers": [

@@ -23,14 +23,14 @@ app.config(function($stateProvider, $urlRouterProvider){
         })
         .state('whattodo.main', {
             url: '',
-            templateUrl: "static/views/main.html",
-            controller: 'MainController'
-        })
+            templateUrl: "views/main.html",
+            controller: 'MainController',
 
-        .state('tahoe.main.map', {
-            url: "map",
-            abstract:true,
-            template: '<ui-view></ui-view>'
+            resolve : {
+                coordinates : ['CoordinateService', function(CoordinateService) {
+                    return CoordinateService.get();
+                }]
+            }
 
         })
 

@@ -49,27 +49,15 @@
     path {
         fill: none;
         stroke: #000;
-        stroke-width: 10px;
+        stroke-width: 4px;
     }
 
 </style>
 
 <div class="table-layout" >
 
-    <div class="table-cell fixed-width-400" >
-        <div class="BigMapholder">
-            <div>
-                <div style="width:100px" ng-controller="PictureOnMapController">
-                    {{picture}}
-                    <img  ng-if="picture.width >= picture.height" ng-repeat="picture in picturesOnMap.photos" src="{{picture.photo_file_url}}">
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
     <div class="table-cell">
+
         <mainmap route></mainmap>
     </div>
 

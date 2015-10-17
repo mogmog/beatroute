@@ -12,20 +12,17 @@ Application.Directives.directive('route', function ($state, $stateParams, $filte
 
             var layer;
 
-            var data  = [
-                {x : 0, y: 0, geo : {longitude : 0,  latitude : 11},    name : "Place 1"},
-                {x : 0, y: 0, geo : {longitude : 22, latitude : 21},    name : "Place 2"},
-                {x : 0, y: 0, geo : {longitude : 25, latitude : -21},   name : "Place 3"},
-                {x : 0, y: 0, geo : {longitude : 25, latitude : -31},   name : "Place 5"},
-                {x : 0, y: 0, geo : {longitude : 24, latitude : -34},   name : "Place 4"}
+            var data = $scope.coordinates.features[0].geometry.coordinates.map(function(coordinate) {
+                return  {x : 0, y: 0, geo : {longitude : coordinate[0],  latitude : coordinate[1]},    name : "Place 1"}
+            });
 
-            ];
+            console.log(data);
 
             function Route() {
 
                 function transition(path) {
                     $scope.path = path;
-                    path.transition().duration(20000).attrTween("stroke-dasharray", tweenDash).each("end", function() {
+                    path.transition().duration(60000).attrTween("stroke-dasharray", tweenDash).each("end", function() {
                         path.attr('stroke-dasharray', null); //leaving the line as dash-array was causing glitches
                     });
                 }
@@ -46,7 +43,7 @@ Application.Directives.directive('route', function ($state, $stateParams, $filte
 
                 this.addShapes = function() {
                     layer.append("path").attr('class', 'g-trail g-trail-usa').style("stroke", "#000").call(transition);
-                    layer.append("circle").style("stroke", "#000")
+                    //layer.append("circle").style("stroke", "#000")
 
                     layer
                         .selectAll('.marker')
@@ -85,17 +82,17 @@ Application.Directives.directive('route', function ($state, $stateParams, $filte
                         .selectAll("path.g-trail").datum(data).attr("d", $scope.line)
 
 
-                    layer
-                        .selectAll('circle.marker')
-                        .attr("cx", function (d, i) {
-                            return d.x + 4000;
-                        })
-                        .attr("cy", function (d, i) {
-                            return d.y + 4000;
-                        })
-                        .attr("r", function (d) {
-                            return 2
-                        })
+                    //layer
+                    //    .selectAll('circle.marker')
+                    //    .attr("cx", function (d, i) {
+                    //        return d.x + 4000;
+                    //    })
+                    //    .attr("cy", function (d, i) {
+                    //        return d.y + 4000;
+                    //    })
+                    //    .attr("r", function (d) {
+                    //        return 1
+                    //    })
                 };
 
             });
