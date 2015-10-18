@@ -16,8 +16,6 @@ Application.Directives.directive('marker', function ($state, $stateParams, $filt
                 return  {x : 0, y: 0, geo : {longitude : coordinate[0],  latitude : coordinate[1]},    name : "Place 1"}
             });
 
-            console.log(data);
-
             $scope.$on('draw', function() {
 
                 $scope.overlay3.onAdd = function () {
