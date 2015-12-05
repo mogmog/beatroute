@@ -27,10 +27,10 @@ Application.Directives.directive('route', function ($rootScope, $state, $statePa
 
                         _path = path;
 
-                        _path.transition().duration(60000).attrTween("stroke-dasharray", tweenDash).each("end", function () {
+                        _path.transition().duration(25000).attrTween("stroke-dasharray", tweenDash).each("end", function () {
                             path.attr('stroke-dasharray', null); //leaving the line as dash-array was causing glitches
 
-                            data = [];
+                            //data = [];
                             $scope.overlay.draw();
 
                         });
@@ -52,7 +52,7 @@ Application.Directives.directive('route', function ($rootScope, $state, $statePa
                     }
 
                     this.addShapes = function () {
-                        layer.append("path").attr('class', 'g-trail g-trail-usa').style("stroke", "#000").call(transition);
+                        layer.append("path").attr('class', 'trail').call(transition);
                     }
                 }
 
@@ -80,10 +80,10 @@ Application.Directives.directive('route', function ($rootScope, $state, $statePa
 
                         projection = this.getProjection();
 
-
+                        console.log(data);
                         data.forEach(function(item) {
 
-                            //console.log(item);
+
 
                             // update the x y for the new map layout, post zooming
                             item.forEach(function (search) {
@@ -91,7 +91,7 @@ Application.Directives.directive('route', function ($rootScope, $state, $statePa
                                 search.y = projection.fromLatLngToDivPixel(new google.maps.LatLng(search.geo.latitude, search.geo.longitude)).y;
                             });
 
-                            layer.selectAll("path.g-trail").datum(item).attr("d", line)
+                            layer.selectAll("path.trail").datum(item).attr("d", line)
                         });
 
 
