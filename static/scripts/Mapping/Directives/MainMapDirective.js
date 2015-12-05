@@ -21,29 +21,8 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
                 streetViewControl       : false,
                 overviewMapControl      : false,
                 center                  : new google.maps.LatLng(43.50653, 16.44415),
-                zoom                    : 12,
-                styles:[
-                    {
-                        "stylers": [
-                            { "weight": 0.1 },
-                            { "visibility": "on" }
-                        ]
-                    },{
-                        "featureType": "administrative.locality",
-                        "stylers": [
-                            { "visibility": "on" },
-                            { "weight": 0.1 }
-
-                        ]
-                    },{
-                        "featureType": "administrative.neighborhood",
-                        "stylers": [
-                            { "visibility": "on" },
-                            { "weight": 0.1 }
-                        ]
-                    },{
-                    }
-                ]
+                zoom                    : 15,
+                mapTypeId: google.maps.MapTypeId.TERRAIN
             };
 
         },
