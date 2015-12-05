@@ -8,7 +8,7 @@ Application.Controllers = angular.module('application.controllers', []);
 Application.Filters     = angular.module('application.filters',     []);
 Application.Directives  = angular.module('application.directives',  []);
 
-var app = angular.module('WhatToDo', ['ngRoute','ui', 'ui.router', 'ngResource', 'application.filters', 'application.services', 'application.directives', 'application.constants', 'application.controllers']);
+var app = angular.module('beatroute', ['ui', 'ngResource', 'ui.router', 'application.filters', 'application.services', 'application.directives', 'application.constants', 'application.controllers']);
 
 app.config(function($stateProvider, $urlRouterProvider){
 
@@ -16,19 +16,13 @@ app.config(function($stateProvider, $urlRouterProvider){
 
     $stateProvider
 
-        .state('whattodo', {
-            url: "/",
-            abstract:true ,
-            template: "<ui-view></ui-view>"
-        })
-
-        .state('whattodo.main', {
-            url: 'map',
+        .state('beatroute', {
+            url: '/',
 
             resolve: {
                 days: function($stateParams, DayService, $q) {
 
-                    var day1 =  DayService.get({id : 3}).$promise;
+                    var day1 =  DayService.get({id : 2}).$promise;
                     var day2 =  DayService.get({id : 3}).$promise;
 
                     return $q.all([day1]).then(function(results) {
@@ -38,8 +32,6 @@ app.config(function($stateProvider, $urlRouterProvider){
                                 return  {x : 0, y: 0, geo : {longitude : coordinate[0],  latitude : coordinate[1]}}
                             }));
 
-
-
                         });
                     });
 
@@ -47,9 +39,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 
             },
 
-            //templateUrl: '/main/category/ribbon',
-            templateUrl: "views/main.html",
-
+            templateUrl: "static/views/main.html",
             controller: 'MainController'
 
         })

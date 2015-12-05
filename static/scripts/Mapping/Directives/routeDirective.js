@@ -10,7 +10,7 @@ Application.Directives.directive('route', function ($rootScope, $state, $statePa
 
         link : function($scope) {
 
-            var layer, data = [];
+            var layer, data = [], projection;
 
             $scope.index = 0;
 
@@ -27,7 +27,7 @@ Application.Directives.directive('route', function ($rootScope, $state, $statePa
 
                         _path = path;
 
-                        _path.transition().duration(35000).attrTween("stroke-dasharray", tweenDash).each("end", function () {
+                        _path.transition().duration(60000).attrTween("stroke-dasharray", tweenDash).each("end", function () {
                             path.attr('stroke-dasharray', null); //leaving the line as dash-array was causing glitches
 
                             data = [];
@@ -38,8 +38,14 @@ Application.Directives.directive('route', function ($rootScope, $state, $statePa
 
                     //thanks to http://zevross.com/blog/2014/09/30/use-the-amazing-d3-library-to-animate-a-path-on-a-leaflet-map/
                     function tweenDash() {
+                        var count = 0;
                         return function (t) {
                             var l = _path.node().getTotalLength();
+
+                            var p = _path.node().getPointAtLength(t * l);
+
+                             $scope.dcumapping.panTo(projection.fromDivPixelToLatLng(new google.maps.Point(p.x - 4000, p.y - 4000)));
+
                             var interpolate = d3.interpolateString("0," + l, l + "," + l);
                             return interpolate(t);
                         }
@@ -72,7 +78,7 @@ Application.Directives.directive('route', function ($rootScope, $state, $statePa
 
                     $scope.overlay.draw = function () {
 
-                        var projection = this.getProjection();
+                        projection = this.getProjection();
 
 
                         data.forEach(function(item) {

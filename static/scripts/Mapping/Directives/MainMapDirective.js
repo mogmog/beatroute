@@ -10,12 +10,12 @@ Application.Directives.directive('mainmap', function ($state, $stateParams, $fil
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: 'views/Directives/mainmapdirective.html',
+        templateUrl: 'static/views/Directives/mainmapdirective.html',
         controller: function($scope) {
 
             $scope.mapOptions = {
-                panControl              : true,
-                zoomControl             : true,
+                panControl              : false,
+                zoomControl             : false,
                 mapTypeControl          : true,
                 scaleControl            : false,
                 streetViewControl       : false,

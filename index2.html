@@ -85,9 +85,9 @@
 
     //read in the GeoJSON. This function is asynchronous so
     // anything that needs the json file should be within
-    d3.json("day1.json", function(collection) {
+    d3.json("static/day1.json", function(collection) {
 
-        //console.log(collection);
+        console.log(collection);
 
         // this is not needed right now, but for future we may need
         // to implement some filtering. This uses the d3 filter function

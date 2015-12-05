@@ -1,3 +1,3 @@
 Application.Services.factory('DayService', function($resource) {
-        return $resource('day:id.json', {id: '@id'});
+        return $resource('static/day:id.json', {id: '@id'});
 });
