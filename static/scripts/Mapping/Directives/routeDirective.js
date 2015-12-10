@@ -27,7 +27,7 @@ Application.Directives.directive('route', function ($rootScope, $state, $statePa
 
                         _path = path;
 
-                        _path.transition().duration($scope.duration || 1200).attrTween("stroke-dasharray", tweenDash).each("end", function () {
+                        _path.transition().duration($scope.duration || 25000).attrTween("stroke-dasharray", tweenDash).each("end", function () {
                             path.attr('stroke-dasharray', null); //leaving the line as dash-array was causing glitches
 
                             //data = [];
